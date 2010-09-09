@@ -4,16 +4,15 @@
 " Author: Jeet Sukumaran
 "
 " This plugin provides easy application of the 'vimgrep' command on buffers
-" (as opposed to the filesystem, which is its normal mode of operation).
-" It provides two commands: one to search just the current buffer, and the
-" other to search all open buffers.
-" The QuickFix buffer will be populated with the search results, if any, and
-" opened for viewing. The search pattern will also be assigned to the search
-" register, so that matches will be highlighted if 'hlsearch' is on (':set
-" hlsearch').
+" (as opposed to the filesystem, which is its normal mode of operation).  It
+" provides two commands: one to search just the current buffer, and the other
+" to search all listed buffers.  The QuickFix buffer will be populated with
+" the search results, if any, and opened for viewing. The search pattern will
+" also be assigned to the search register, so that matches will be highlighted
+" if 'hlsearch' is on (':set hlsearch').
 "
 " Two commands are provided, ':G' and ':GG'. The first limits the search to
-" the current buffer, while the second searches all open buffers.
+" the current buffer, while the second searches all listed buffers.
 "
 " If you do not like the cryptic/genericness of these 'short' commands, put:
 "
@@ -21,6 +20,30 @@
 "
 " in your "~/.vimrc", and ':VimgrepBuffer' and ':VimgrepBuffers' will be set as
 " the commands instead.
+"
+" The pattern specification is *exactly* like that for 'vimgrep'.  This means
+" that if the pattern starts with a non-identifier or contains any literal whitespace
+" characters, for correct behavior you will have to enclose the pattern in
+" delimiter characters (e.g. "/", "@", "#"):
+"
+"    :G /\s*print "\d/
+"    :GG /\s*def\s\+\w\+(/
+"    :G /\(def\s\+\|class\s+\)/
+"    :GG /\cisland/
+"    :G /the quick brown \w+/
+"    :GG /except \+\w\+Error/
+"
+" If your pattern starts with an identifier you can omit the enclosing
+" delimiters:
+"
+"    :G def\s\+\w\+(.*\*\*kwargs)
+"    :GG except\s\+\w\+Error
+"
+" In this latter case, the pattern will be considered to be
+" whitespace-delimited, and so if your pattern contains any literal whitespace
+" you may get incorrect results. This behavior is exactly like that of
+" 'vimgrep'.
+"
 
 if exists("g:vimgrepbuffer_loaded")
 	finish
